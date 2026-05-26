@@ -8,6 +8,7 @@ export function initFiltering(elements, indexes) {
   Object.keys(indexes) // Получаем ключи из объекта
     .forEach((elementName) => {
       // Перебираем по именам
+
       elements[elementName].append(
         // в каждый элемент добавляем опции
         ...Object.values(indexes[elementName]) // формируем массив имён, значений опций
@@ -15,14 +16,15 @@ export function initFiltering(elements, indexes) {
             // используйте name как значение и текстовое содержимое
             // @todo: создать и вернуть тег опции
             const option = document.createElement("option");
-            option.value = name.value;
-            option.textContent = name.textContent;
+            option.value = name;
+            option.textContent = name;
             return option;
           }),
       );
     });
 
   return (data, state, action) => {
+    console.log(state);
     // @todo: #4.2 — обработать очистку поля
     if (action && action.type === "submit") {
       const buttonName = action;
@@ -35,6 +37,17 @@ export function initFiltering(elements, indexes) {
         state[fieldName] = "";
       }
     }
+    
+    const compareState = {
+      ...state,
+      totalRange: [
+        state.totalFrom ? parseFloat(state.totalFrom) : null,
+        state.totalTo ? parseFloat(state.totalTo) : null,
+      ],
+    };
+
+    delete compareState.totalFrom;
+    delete compareState.totalTo;
 
     // @todo: #4.5 — отфильтровать данные используя компаратор
     return data.filter((row) => compare(row, state));
