@@ -14,7 +14,7 @@ export function initFiltering(elements, indexes) {
           .map((name) => {
             // используйте name как значение и текстовое содержимое
             // @todo: создать и вернуть тег опции
-            const option = document.createElement('option');
+            const option = document.createElement("option");
             option.value = name.value;
             option.textContent = name.textContent;
             return option;
@@ -24,28 +24,18 @@ export function initFiltering(elements, indexes) {
 
   return (data, state, action) => {
     // @todo: #4.2 — обработать очистку поля
-    if (action && action.type === "click") {
-      const button = action.target;
-      if (button.name === "clear") {
-        const fieldName = button.getAttribute("data-field");
-        if (fieldName && state.hasOwnProperty(fieldName)) {
-          const parentElement = button.parentElement;
-          const inputField = parentElement.querySelector(
-            "input, select, textarea",
-          );
+    if (action && action.type === "submit") {
+      const buttonName = action;
 
-          if (inputField) {
-            if (inputField.tagName === "SELECT") {
-              inputField.selectedIndex = 0;
-            } else {
-              inputField.value = "";
-            }
-          }
-
-          state[fieldName] = "";
-        }
+      if (buttonName.getAttribute("name") === "clear") {
+        const parentElement = buttonName.parentElement;
+        const inputField = parentElement.querySelector("input, select");
+        inputField.value = "";
+        const fieldName = buttonName.getAttribute("data-field");
+        state[fieldName] = "";
       }
     }
+
     // @todo: #4.5 — отфильтровать данные используя компаратор
     return data.filter((row) => compare(row, state));
   };
