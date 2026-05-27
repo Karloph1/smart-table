@@ -46,7 +46,6 @@ export function initFiltering(elements, indexes) {
       ];
     }
 
-    console.log(state.total);
     // @todo: #4.5 — отфильтровать данные используя компаратор
     return data.filter((row) => compare(row, state));
   };
