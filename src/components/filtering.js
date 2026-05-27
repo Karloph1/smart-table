@@ -24,7 +24,6 @@ export function initFiltering(elements, indexes) {
     });
 
   return (data, state, action) => {
-    console.log(state);
     // @todo: #4.2 — обработать очистку поля
     if (action && action.type === "submit") {
       const buttonName = action;
@@ -37,18 +36,17 @@ export function initFiltering(elements, indexes) {
         state[fieldName] = "";
       }
     }
-    
-    const compareState = {
-      ...state,
-      totalRange: [
-        state.totalFrom ? parseFloat(state.totalFrom) : null,
-        state.totalTo ? parseFloat(state.totalTo) : null,
-      ],
-    };
 
-    delete compareState.totalFrom;
-    delete compareState.totalTo;
+    if (state.totalFrom !== "" || state.totalTo !== "") {
+      state.total = [
+        state.totalFrom === ""
+          ? Number.MIN_SAFE_INTEGER
+          : Number(state.totalFrom),
+        state.totalTo === "" ? Number.MAX_SAFE_INTEGER : Number(state.totalTo),
+      ];
+    }
 
+    console.log(state.total);
     // @todo: #4.5 — отфильтровать данные используя компаратор
     return data.filter((row) => compare(row, state));
   };
