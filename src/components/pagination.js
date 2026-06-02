@@ -42,14 +42,13 @@ export const initPagination = (
     const visiblePages = getPages(page, pageCount, 5);
     pages.replaceChildren(
       ...visiblePages.map((pageNumber) => {
-        // перебираем их и создаём для них кнопку
         const el = pageTemplate.cloneNode(true);
         return createPage(el, pageNumber, pageNumber === page);
       }),
     );
 
     fromRow.textContent = (page - 1) * limit + 1;
-    toRow.textContent = page * limit;
+    toRow.textContent = Math.min(page * limit, total);
     totalRows.textContent = total;
   };
 
