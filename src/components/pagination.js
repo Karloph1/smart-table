@@ -37,7 +37,7 @@ export const initPagination = (
   };
 
   const updatePagination = (total, { page, limit }) => {
-    pageCount = Math.max(1, Math.ceil(total / limit));
+    pageCount = Math.ceil(total / limit);
 
     const visiblePages = getPages(page, pageCount, 5);
     pages.replaceChildren(

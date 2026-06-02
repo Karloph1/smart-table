@@ -20,10 +20,6 @@ import { initSearching } from "./components/searching.js";
 // Исходные данные используемые в render()
 const api = initData(sourceData);
 
-/**
- * Сбор и обработка полей из таблицы
- * @returns {Object}
- */
 function collectState() {
   const state = processFormData(new FormData(sampleTable.container));
 
@@ -42,21 +38,17 @@ function collectState() {
  * @param {HTMLButtonElement?} action
  */
 async function render(action) {
-  try {
-    let state = collectState(); // состояние полей из таблицы
-    let query = {};
-    query = applySearching(query, state, action);
-    query = applyFiltering(query, state, action);
-    query = applySorting(query, state, action);
-    query = applyPagination(query, state, action);
+  let state = collectState(); // состояние полей из таблицы
+  let query = {};
+  query = applySearching(query, state, action);
+  query = applyFiltering(query, state, action);
+  query = applySorting(query, state, action);
+  query = applyPagination(query, state, action);
 
-    const { total, items } = await api.getRecords(query);
+  const { total, items } = await api.getRecords(query);
 
-    updatePagination(total, query);
-    sampleTable.render(items);
-  } catch (error) {
-    console.error("[RENDER_ERROR]", error);
-  }
+  updatePagination(total, query);
+  sampleTable.render(items);
 }
 
 const sampleTable = initTable(
