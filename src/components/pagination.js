@@ -37,16 +37,9 @@ export const initPagination = (
   };
 
   const updatePagination = (total, { page, limit }) => {
-    console.log("[UPDATE_PAGINATION]", {
-      total,
-      page,
-      limit,
-    });
     pageCount = Math.max(1, Math.ceil(total / limit));
-    console.log("[PAGE_COUNT]", pageCount);
 
     const visiblePages = getPages(page, pageCount, 5);
-    console.log("[VISIBLE_PAGES]", visiblePages);
     pages.replaceChildren(
       ...visiblePages.map((pageNumber) => {
         const el = pageTemplate.cloneNode(true);

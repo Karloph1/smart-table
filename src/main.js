@@ -43,18 +43,13 @@ function collectState() {
  */
 async function render(action) {
   try {
-    console.log("[RENDER] started");
-
     let state = collectState(); // состояние полей из таблицы
-
-    console.log("[STATE]", state);
     let query = {};
     query = applySearching(query, state, action);
     query = applyFiltering(query, state, action);
     query = applySorting(query, state, action);
     query = applyPagination(query, state, action);
 
-    console.log("[QUERY]", query);
     const { total, items } = await api.getRecords(query);
 
     updatePagination(total, query);
