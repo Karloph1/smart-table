@@ -1,7 +1,6 @@
 import { makeIndex } from "./lib/utils.js";
 
 const BASE_URL = "https://webinars.webdev.education-services.ru/sp7-api";
-const USE_MOCKS = process.env.NODE_ENV === "test";
 
 export function initData(sourceData) {
   // переменные для кеширования данных
@@ -9,41 +8,6 @@ export function initData(sourceData) {
   let customers;
   let lastResult;
   let lastQuery;
-
-  if (USE_MOCKS) {
-    // Имитация данных: создаём 25 записей, продавцов, покупателей
-    const mockSellers = { 1: "Иван", 2: "Петр" };
-    const mockCustomers = { 1: "Клиент А", 2: "Клиент Б" };
-    const mockItems = Array.from({ length: 25 }, (_, i) => ({
-      receipt_id: i,
-      date: `2024-01-${String(i + 1).padStart(2, "0")}`,
-      seller_id: (i % 2) + 1,
-      customer_id: (i % 2) + 1,
-      total_amount: 1000 + i,
-    }));
-
-    const getIndexes = async () => ({
-      sellers: mockSellers,
-      customers: mockCustomers,
-    });
-    const getRecords = async (query) => {
-      const limit = parseInt(query.limit) || 10;
-      const page = parseInt(query.page) || 1;
-      const start = (page - 1) * limit;
-      const items = mockItems.slice(start, start + limit);
-      return {
-        total: mockItems.length,
-        items: items.map((item) => ({
-          id: item.receipt_id,
-          date: item.date,
-          seller: mockSellers[item.seller_id],
-          customer: mockCustomers[item.customer_id],
-          total: item.total_amount,
-        })),
-      };
-    };
-    return { getIndexes, getRecords };
-  }
 
   // функция для приведения строк в тот вид, который нужен нашей таблице
   const mapRecords = (data) =>
