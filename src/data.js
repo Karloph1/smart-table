@@ -3,6 +3,7 @@ import { makeIndex } from "./lib/utils.js";
 const BASE_URL = "https://webinars.webdev.education-services.ru/sp7-api";
 
 export function initData(sourceData) {
+  console.log(sourceData);
   // переменные для кеширования данных
   let sellers;
   let customers;
@@ -35,6 +36,7 @@ export function initData(sourceData) {
 
   // функция получения записей о продажах с сервера
   const getRecords = async (query, isUpdated = false) => {
+    console.log("[GET_RECORDS] called", query);
     const qs = new URLSearchParams(query); // преобразуем объект параметров в SearchParams объект, представляющий query часть url
     const nextQuery = qs.toString(); // и приводим к строковому виду
 
@@ -45,7 +47,11 @@ export function initData(sourceData) {
 
     // если прошлый квери не был ранее установлен или поменялись параметры, то запрашиваем данные с сервера
     const response = await fetch(`${BASE_URL}/records?${nextQuery}`);
+
+    console.log("[FETCH_RECORDS_RESPONSE]", response.status, response.ok);
+
     const records = await response.json();
+    console.log("[RECORDS]", records);
 
     lastQuery = nextQuery; // сохраняем для следующих запросов
     lastResult = {

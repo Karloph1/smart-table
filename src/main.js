@@ -42,17 +42,26 @@ function collectState() {
  * @param {HTMLButtonElement?} action
  */
 async function render(action) {
-  let state = collectState(); // состояние полей из таблицы
-  let query = {};
-  query = applySearching(query, state, action);
-  query = applyFiltering(query, state, action); 
-  query = applySorting(query, state, action);
-  query = applyPagination(query, state, action);
+  try {
+    console.log("[RENDER] started");
 
-  const { total, items } = await api.getRecords(query);
-  
-  updatePagination(total, query);
-  sampleTable.render(items);
+    let state = collectState(); // состояние полей из таблицы
+
+    console.log("[STATE]", state);
+    let query = {};
+    query = applySearching(query, state, action);
+    query = applyFiltering(query, state, action);
+    query = applySorting(query, state, action);
+    query = applyPagination(query, state, action);
+
+    console.log("[QUERY]", query);
+    const { total, items } = await api.getRecords(query);
+
+    updatePagination(total, query);
+    sampleTable.render(items);
+  } catch (error) {
+    console.error("[RENDER_ERROR]", error);
+  }
 }
 
 const sampleTable = initTable(
@@ -84,7 +93,9 @@ const { applyPagination, updatePagination } = initPagination(
   },
 );
 
-const {applyFiltering, updateIndexes} = initFiltering(sampleTable.filter.elements);
+const { applyFiltering, updateIndexes } = initFiltering(
+  sampleTable.filter.elements,
+);
 
 const applySearching = initSearching("search");
 
@@ -93,7 +104,7 @@ appRoot.appendChild(sampleTable.container);
 
 async function init() {
   const indexes = await api.getIndexes();
-  
+
   updateIndexes(sampleTable.filter.elements, {
     searchBySeller: indexes.sellers,
   });
