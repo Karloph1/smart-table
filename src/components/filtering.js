@@ -13,6 +13,18 @@ export function initFiltering(elements, indexes) {
   };
 
   const applyFiltering = (query, state, action) => {
+    if (action && action.type === "submit") {
+      const buttonName = action;
+
+      if (buttonName.getAttribute("name") === "clear") {
+        const parentElement = buttonName.parentElement;
+        const inputField = parentElement.querySelector("input, select");
+        inputField.value = "";
+        const fieldName = buttonName.getAttribute("data-field");
+        state[fieldName] = "";
+      }
+    }
+
     const filter = {};
     Object.keys(elements).forEach((key) => {
       if (elements[key]) {
